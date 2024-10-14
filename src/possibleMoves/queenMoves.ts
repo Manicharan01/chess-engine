@@ -2,7 +2,11 @@ import { getBishopMove } from "./bishopMoves";
 import { getRookMove } from "./rookMoves";
 
 export function getQueenMove(row: number, col: number): [number, number][] {
-    return [...getRookMove(row, col), ...getBishopMove(row, col)];
-}
+    const rookMoves: [number, number][] = getRookMove(row, col);
+    const bishopMoves: [number, number][] = getBishopMove(row, col);
+    const queenMoves: [number, number][] = [];
 
-console.log(getQueenMove(3, 4));
+    rookMoves.map((move) => queenMoves.push(move));
+    bishopMoves.map((move) => queenMoves.push(move));
+    return queenMoves;
+}

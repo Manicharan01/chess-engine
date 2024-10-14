@@ -34,7 +34,7 @@ function moveChecker(previous_move: string, current_move: string): boolean {
                     }
                 }
 
-                if (isKingSafeorNot(row, col, current_move.split("_")[1])) {
+                if (isKingSafeorNot(current_player, row, col, current_move.split("_")[1])) {
                     return true
                 } else {
                     return false

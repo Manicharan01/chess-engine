@@ -10,5 +10,3 @@ export function getBishopMove(row: number, col: number): [number, number][] {
 
     return moves;
 }
-
-console.log(getBishopMove(4, 4));

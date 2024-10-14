@@ -1,3 +1,6 @@
+import { getAllBlackMove } from "./allBlackMoves";
+import { getAllWhiteMove } from "./allWhiteMoves";
+
 const boardSize = 8;
 const directions = [
     { row: -1, col: 0 },
@@ -16,7 +19,7 @@ export function getKingMoves(row: number, col: number): [number, number][] {
     return kingMoves.filter(([r, c]) => r >= 0 && r < boardSize && c >= 0 && c < boardSize);
 }
 
-export function isKingSafeorNot(row: number, col: number, move: string): boolean {
+export function isKingSafeorNot(current_player: string, row: number, col: number, move: string): boolean {
     const kingMoves: [number, number][] = getKingMoves(row, col);
 
     let moveIsThere: boolean = false;
@@ -29,8 +32,15 @@ export function isKingSafeorNot(row: number, col: number, move: string): boolean
     })
 
     if (moveIsThere) {
+        let opponentAllMoves: [number, number][] = [];
+        if (current_player === "white") {
+            opponentAllMoves = getAllBlackMove();
+        } else {
+            opponentAllMoves = getAllWhiteMove();
+        }
 
     } else {
         return false
     }
+    return true
 }
