@@ -14,8 +14,8 @@ export var board = [
 export const boardSize = 8;
 var player1 = "white";
 var player2 = "black";
-var current_player = player1;
-var previous_player = "";
+export var current_player = player1;
+export var previous_player = player2;
 
 function moveChecker(previous_move: string, current_move: string): boolean {
     if (current_player != current_move.split("_")[0]) {
