@@ -1,12 +1,12 @@
 import { board, current_player, previous_player } from "..";
 
-export function getRookMove(row: number, col: number): [number, number][] {
+export function getRookMove(row: number, col: number, opponent: string, your_color: string): [number, number][] {
     const moves: [number, number][] = [];
 
     for (let i = row + 1; i < 8; i++) {
-        if (board[i][col].startsWith(current_player)) {
+        if (board[i][col].startsWith(your_color)) {
             break
-        } else if (board[i][col].startsWith(previous_player)) {
+        } else if (board[i][col].startsWith(opponent)) {
             moves.push([i, col])
             break
         }
@@ -15,9 +15,9 @@ export function getRookMove(row: number, col: number): [number, number][] {
     }
 
     for (let i = row - 1; i >= 0; i--) {
-        if (board[i][col].startsWith(current_player)) {
+        if (board[i][col].startsWith(your_color)) {
             break
-        } else if (board[i][col].startsWith(previous_player)) {
+        } else if (board[i][col].startsWith(opponent)) {
             moves.push([i, col])
             break
         }
@@ -26,9 +26,9 @@ export function getRookMove(row: number, col: number): [number, number][] {
     }
 
     for (let i = col + 1; i < 8; i++) {
-        if (board[row][i].startsWith(current_player)) {
+        if (board[row][i].startsWith(your_color)) {
             break
-        } else if (board[row][i].startsWith(current_player)) {
+        } else if (board[row][i].startsWith(opponent)) {
             moves.push([row, i]);
             break
         }
@@ -37,9 +37,9 @@ export function getRookMove(row: number, col: number): [number, number][] {
     }
 
     for (let i = col - 1; i >= 0; i--) {
-        if (board[row][i].startsWith(current_player)) {
+        if (board[row][i].startsWith(your_color)) {
             break
-        } else if (board[row][i].startsWith(current_player)) {
+        } else if (board[row][i].startsWith(opponent)) {
             moves.push([row, i]);
             break
         }
