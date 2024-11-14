@@ -13,26 +13,26 @@ export function getAllWhiteMove(): [number, number][] {
         for (let j = 0; j < boardSize; j++) {
             if (board[i][j].startsWith("white_")) {
                 switch (board[i][j].split("_")[1]) {
-                    case "pawn":
-                        allPossibleMoves.push(...getPawnMoves(i, j, "black", true));
-                        break;
+                    //case "pawn":
+                    //    allPossibleMoves.push(...getPawnMoves(i, j, "black", true));
+                    //    break;
                     case "rook":
                         allPossibleMoves.push(...getRookMove(i, j, "black", "white"));
                         break;
                     case "king":
-                        allPossibleMoves.push(...getKingMoves(i, j));
+                        allPossibleMoves.push(...getKingMoves(i, j, "black"));
                         break;
                     case "queen":
                         allPossibleMoves.push(...getQueenMove(i, j, "black", "white"));
                         break;
-                    case "knight":
-                        allPossibleMoves.push(...getKnightMoves(i, j, "black"));
-                        break;
+                    //case "knight":
+                    //    allPossibleMoves.push(...getKnightMoves(i, j, "black"));
+                    //    break;
                     case "bishop":
                         allPossibleMoves.push(...getBishopMove(i, j, "black", "white"));
                         break;
                     default:
-                        console.log(board[i][j]);
+                        console.log("error");
                 }
             }
         }
@@ -40,3 +40,5 @@ export function getAllWhiteMove(): [number, number][] {
 
     return allPossibleMoves;
 }
+
+console.log(getAllWhiteMove());

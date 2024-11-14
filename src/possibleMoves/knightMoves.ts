@@ -9,7 +9,7 @@ export function getKnightMoves(row: number, col: number, opponent: string): [num
         [row - 1, col + 2], [row - 1, col - 2]
     ];
 
-    return knightMoves.filter(([r, c]) => r >= 0 && r < 8 && c >= 0 && c < 8 && board[r][c].startsWith(opponent));
+    return knightMoves.filter(([r, c]) => r >= 0 && r < 8 && c >= 0 && c < 8 && (board[r][c].startsWith(opponent) || board[r][c] === "0"));
 }
 
 export function isMoveLegal(piecePosition: [number, number], current_move: string): boolean {

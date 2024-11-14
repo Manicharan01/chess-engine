@@ -20,7 +20,7 @@ export function getAllBlackMove(): [number, number][] {
                         allPossibleMoves.push(...getRookMove(i, j, "white", "black"));
                         break;
                     case "king":
-                        allPossibleMoves.push(...getKingMoves(i, j));
+                        allPossibleMoves.push(...getKingMoves(i, j, "white"));
                         break;
                     case "queen":
                         allPossibleMoves.push(...getQueenMove(i, j, "white", "black"));
@@ -32,7 +32,7 @@ export function getAllBlackMove(): [number, number][] {
                         allPossibleMoves.push(...getBishopMove(i, j, "white", "black"));
                         break;
                     default:
-                        console.log(board[i][j]);
+                        console.log("error");
                 }
             }
         }
@@ -40,5 +40,3 @@ export function getAllBlackMove(): [number, number][] {
 
     return allPossibleMoves;
 }
-
-console.log(getAllBlackMove());

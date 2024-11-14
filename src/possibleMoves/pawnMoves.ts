@@ -7,38 +7,12 @@ export function getPawnMoves(row: number, col: number, opponent: string, isWhite
     let blackPromotingAvailable: boolean = false;
 
     if (isWhite) {
-        if (row === 6) {
-            moves.push([row - 2, col]);
-        }
-
-        if (row === 2) {
-            whitePromotingAvailable = true;
-        }
-
-        if (row - 1 >= 0) {
-            if (board[row - 1][col] === "0") {
-                moves.push([row - 1, col]);
-            }
-        }
-
-        if (row - 1 >= 0 && col + 1 < 8) {
-            if (board[row - 1][col + 1].startsWith(opponent)) {
-                moves.push([row - 1, col + 1]);
-            }
-        }
-
-        if (row - 1 >= 0 && col - 1 >= 0) {
-            if (board[row - 1][col - 1].startsWith(opponent)) {
-                moves.push([row - 1, col - 1]);
-            }
-        }
-    } else {
         if (row === 1) {
             moves.push([row + 2, col]);
         }
 
         if (row === 6) {
-            blackPromotingAvailable = true;
+            whitePromotingAvailable = true;
         }
 
         if (row + 1 < 8) {
@@ -56,6 +30,32 @@ export function getPawnMoves(row: number, col: number, opponent: string, isWhite
         if (row + 1 < 8 && col - 1 >= 0) {
             if (board[row + 1][col - 1].startsWith(opponent)) {
                 moves.push([row + 1, col - 1]);
+            }
+        }
+    } else {
+        if (row === 6) {
+            moves.push([row - 2, col]);
+        }
+
+        if (row === 1) {
+            blackPromotingAvailable = true;
+        }
+
+        if (row - 1 >= 0) {
+            if (board[row - 1][col] === "0") {
+                moves.push([row - 1, col]);
+            }
+        }
+
+        if (row - 1 >= 0 && col + 1 < 8) {
+            if (board[row - 1][col + 1].startsWith(opponent)) {
+                moves.push([row - 1, col + 1]);
+            }
+        }
+
+        if (row - 1 >= 0 && col - 1 >= 0) {
+            if (board[row - 1][col - 1].startsWith(opponent)) {
+                moves.push([row - 1, col - 1]);
             }
         }
     }
