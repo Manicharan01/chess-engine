@@ -9,3 +9,5 @@ To run the chess engine, you need to run `node build/index.js` in the root direc
 # Caution
 
 This is a very early version of the chess engine, and it is not yet fully functional.
+
+<center>Leave a star if you like the project</center>
