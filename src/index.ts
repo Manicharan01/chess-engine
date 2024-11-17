@@ -9,7 +9,7 @@ export var board = [
     ["0", "0", "0", "0", "0", "0", "0", "0"],
     ["0", "0", "0", "0", "0", "0", "0", "0"],
     ["white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn"],
-    ["white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook"]
+    ["white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook"],
 ];
 export const boardSize = 8;
 var player1 = "white";
@@ -34,11 +34,6 @@ function moveChecker(previous_move: string, current_move: string): boolean {
                     }
                 }
 
-                if (isKingSafeorNot(current_player, row, col, current_move.split("_")[1])) {
-                    return true
-                } else {
-                    return false
-                }
             case "k":
                 if (possibleKingMoves(current_move)) {
                     return true
@@ -51,5 +46,3 @@ function moveChecker(previous_move: string, current_move: string): boolean {
     }
 
 }
-
-moveChecker("black_pe5", "white_kc3");
