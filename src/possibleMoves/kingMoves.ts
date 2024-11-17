@@ -1,4 +1,6 @@
 import { board } from "..";
+import { isKingInCheck } from "../check/check";
+import { MoveTracker } from "../moveTracker";
 import { getAllBlackMove } from "./allBlackMoves";
 import { getAllWhiteMove } from "./allWhiteMoves";
 
@@ -59,4 +61,42 @@ export function truePossibleKingMoves(current_player: string): [number, number][
     let legalMoves: [number, number][] = current_player === "white" ? kingMoves.filter(([r, c]) => possibleKingMoves([r, c], "black")) : kingMoves.filter(([r, c]) => possibleKingMoves([r, c], "white"));
 
     return legalMoves;
+}
+
+export function getCastlingMoves(
+    current_player: string,
+    moveTracker: MoveTracker,
+    isSquareAttacked: (row: number, col: number, byColor: string) => boolean
+): [number, number][] {
+    let castlingMoves: [number, number][] = [];
+    const rights = moveTracker.getCastlingRights();
+    const row = current_player === "white" ? 0 : 7;
+    const opponent = current_player === "white" ? "black" : "white";
+
+    if (isKingInCheck(current_player)) return castlingMoves;
+
+    if ((current_player === "white" && rights.whiteKingSide) ||
+        (current_player === "black" && rights.blackKingSide)) {
+        if (board[row][5] === "0" &&
+            board[row][6] === "0" &&
+            !isSquareAttacked(row, 4, opponent) &&
+            !isSquareAttacked(row, 5, opponent) &&
+            !isSquareAttacked(row, 6, opponent)) {
+            castlingMoves.push([row, 6]);
+        }
+    }
+
+    if ((current_player === "white" && rights.whiteQueenSide) ||
+        (current_player === "black" && rights.blackQueenSide)) {
+        if (board[row][3] === "0" &&
+            board[row][2] === "0" &&
+            board[row][1] === "0" &&
+            !isSquareAttacked(row, 4, opponent) &&
+            !isSquareAttacked(row, 3, opponent) &&
+            !isSquareAttacked(row, 2, opponent)) {
+            castlingMoves.push([row, 2]);
+        }
+    }
+
+    return castlingMoves;
 }
