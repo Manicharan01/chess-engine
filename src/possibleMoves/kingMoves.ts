@@ -42,16 +42,21 @@ export function possibleKingMoves(kingMove: [number, number], opponentColor: str
     return legalMove;
 }
 
-export function isKingSafeorNot(current_player: string, row: number, col: number): [number, number][] {
+export function truePossibleKingMoves(current_player: string): [number, number][] {
+    let kingPosition: [number, number] = [0, 0];
 
-    if (current_player === "white") {
-        const kingMoves: [number, number][] = getKingMoves(row, col, "black");
-        return kingMoves.filter(([r, c]) => possibleKingMoves([r, c], "black"));
-    } else if (current_player === "black") {
-        const kingMoves: [number, number][] = getKingMoves(row, col, "white");
-        return kingMoves.filter(([r, c]) => possibleKingMoves([r, c], "white"));
-    } else {
-        const kingMoves: [number, number][] = getKingMoves(row, col, "white");
-        return kingMoves;
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            if (board[i][j] === `{current_player}_king`) {
+                kingPosition = [i, j];
+                break;
+            }
+        }
     }
+
+    let kingMoves: [number, number][] = current_player === "white" ? getKingMoves(kingPosition[0], kingPosition[1], "black") : getKingMoves(kingPosition[0], kingPosition[1], "white");
+
+    let legalMoves: [number, number][] = current_player === "white" ? kingMoves.filter(([r, c]) => possibleKingMoves([r, c], "black")) : kingMoves.filter(([r, c]) => possibleKingMoves([r, c], "white"));
+
+    return legalMoves;
 }
