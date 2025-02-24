@@ -1,4 +1,4 @@
-import { board, boardSize } from "../index"
+import { Board } from "../types/types";
 import { getBishopMove } from "./bishopMoves";
 import { getKingMoves } from "./kingMoves";
 import { getKnightMoves } from "./knightMoves";
@@ -6,30 +6,31 @@ import { getPawnMoves } from "./pawnMoves";
 import { getQueenMove } from "./queenMoves";
 import { getRookMove } from "./rookMoves";
 
-export function getAllBlackMove(): [number, number][] {
-    let allPossibleMoves: [number, number][] = [];
+export function getAllBlackMove(board: Board): [number, number][] {
+    let moves: [number, number][] = [];
 
-    for (let i = 0; i < boardSize; i++) {
-        for (let j = 0; j < boardSize; j++) {
-            if (board[i][j].startsWith("black_")) {
-                switch (board[i][j].split("_")[1]) {
-                    case "pawn":
-                        allPossibleMoves.push(...getPawnMoves(i, j, "white", false));
+    for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+            const piece = board[i][j]
+            if (piece && piece.startsWith('black')) {
+                switch (piece) {
+                    case 'black_pawn':
+                        moves.push(...getPawnMoves(board, i, j, "white", false));
                         break;
-                    case "rook":
-                        allPossibleMoves.push(...getRookMove(i, j, "white", "black"));
+                    case 'black_rook':
+                        moves.push(...getRookMove(board, i, j, "white", "black"));
                         break;
-                    case "king":
-                        allPossibleMoves.push(...getKingMoves(i, j, "white"));
+                    case 'black_king':
+                        moves.push(...getKingMoves(board, i, j, "white"));
                         break;
-                    case "queen":
-                        allPossibleMoves.push(...getQueenMove(i, j, "white", "black"));
+                    case 'black_queen':
+                        moves.push(...getQueenMove(board, i, j, "white", "black"));
                         break;
-                    case "knight":
-                        allPossibleMoves.push(...getKnightMoves(i, j, "white"));
+                    case 'black_knight':
+                        moves.push(...getKnightMoves(board, i, j, "white"));
                         break;
-                    case "bishop":
-                        allPossibleMoves.push(...getBishopMove(i, j, "white", "black"));
+                    case 'black_bishop':
+                        moves.push(...getBishopMove(board, i, j, "white", "black"));
                         break;
                     default:
                         console.log("error");
@@ -38,5 +39,5 @@ export function getAllBlackMove(): [number, number][] {
         }
     }
 
-    return allPossibleMoves;
+    return moves;
 }

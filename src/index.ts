@@ -1,15 +1,14 @@
 import { possibleKingMoves } from './king';
-import { isKingSafeorNot } from './possibleMoves/kingMoves';
 
 export var board = [
     ["black_rook", "black_knight", "black_bishop", "black_queen", "black_king", "black_bishop", "black_knight", "black_rook"],
-    ["black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn", "black_pawn"],
+    ["black_pawn", "black_pawn", "black_pawn", "black_pawn", "0", "black_pawn", "black_pawn", "black_pawn"],
     ["0", "0", "0", "0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0", "0", "0", "0"],
-    ["0", "0", "0", "0", "0", "0", "0", "0"],
-    ["white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn"],
-    ["white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook"],
+    ["0", "0", "0", "0", "black_pawn", "0", "0", "0"],
+    ["0", "0", "0", "0", "0", "white_pawn", "0", "black_queen"],
+    ["0", "0", "0", "0", "0", "0", "0", "0"], // White Bishop at f1
+    ["white_pawn", "white_pawn", "white_pawn", "white_pawn", "white_pawn", "0", "white_pawn", "white_pawn"],
+    ["white_rook", "white_knight", "white_bishop", "white_queen", "white_king", "white_bishop", "white_knight", "white_rook"], // White King at e1
 ];
 export const boardSize = 8;
 var player1 = "white";
