@@ -1,3 +1,4 @@
+import { possibleKingMoves } from "../possibleMoves/kingMoves";
 import { Board } from "../types/types";
 
 export function checkmate(board: Board, current_player_color: string): boolean {
@@ -13,10 +14,7 @@ export function checkmate(board: Board, current_player_color: string): boolean {
         }
     }
 
-    // let kingMoves: [number, number][] = truePossibleKingMoves(board, current_player_color);
-    //
-    // return kingMoves.length === 0;
-    //
-    return true
-}
+    let kingMoves: [number, number][] = current_player_color === "white" ? possibleKingMoves(board, true) : possibleKingMoves(board, false)
 
+    return kingMoves.length === 0;
+}
