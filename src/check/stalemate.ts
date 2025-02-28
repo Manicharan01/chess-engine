@@ -1,12 +1,11 @@
-import { getAllBlackMove } from "../possibleMoves/allBlackMoves";
-import { getAllWhiteMove } from "../possibleMoves/allWhiteMoves";
-import { Board, Position } from "../types/types";
+import { getAllOpponentMoves } from "../possibleMoves/moveGenerator";
+import { Board } from "../types/types";
 import { isKingInCheck } from "./check";
 
-export function isStalemate(board: Board, kingPosition: Position, isWhite: boolean): boolean {
+export function isStalemate(board: Board, isWhite: boolean): boolean {
     if (isKingInCheck(board, isWhite)) return false;
 
-    const allMoves = isWhite ? getAllBlackMove(board) : getAllWhiteMove(board);
+    const allMoves = getAllOpponentMoves(board, isWhite);
 
-    return allMoves.length === 0;
+    return false;
 }

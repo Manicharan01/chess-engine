@@ -1,20 +1,11 @@
-import { possibleKingMoves } from "../possibleMoves/kingMoves";
-import { Board } from "../types/types";
+import { getKingMoves } from "../possibleMoves/moveGenerator";
+import { Board, Position } from "../types/types";
+import { getKingPosition } from "./check";
 
-export function checkmate(board: Board, current_player_color: string): boolean {
-    let kingPosition: [number, number] = [-1, -1];
+export function checkmate(board: Board, isWhite: boolean): boolean {
+    let kingPosition: Position = getKingPosition(board, isWhite)
 
-    for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-            const piece = board[i][j]
-            if (piece && piece === current_player_color + '_king') {
-                kingPosition = [i, j];
-                break;
-            }
-        }
-    }
-
-    let kingMoves: [number, number][] = current_player_color === "white" ? possibleKingMoves(board, true) : possibleKingMoves(board, false)
+    let kingMoves: Position[] = getKingMoves(board, kingPosition, isWhite)
 
     return kingMoves.length === 0;
 }

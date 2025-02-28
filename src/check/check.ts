@@ -8,18 +8,18 @@ import { Board, Position } from "../types/types";
 */
 export function getKingPosition(board: Board, isWhite: boolean): Position {
     const kingColor = isWhite ? "white" : "black";
-    let kingPosition: Position = [-1, -1]
+    let kingPosition: Position = { row: -1, col: -1 }
     outer: for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             const piece = board[i][j]
             if (piece && piece === kingColor + "_king") {
-                kingPosition = [i, j]
+                kingPosition = { row: i, col: j }
                 break outer
             }
         }
     }
 
-    if (kingPosition[0] === -1) {
+    if (kingPosition.row === -1) {
         console.error("King position is not found on board")
         throw new Error("King position is not found on board")
     }
@@ -35,7 +35,7 @@ export function getKingPosition(board: Board, isWhite: boolean): Position {
 */
 export function isKingInCheck(board: Board, isWhite: boolean): boolean {
     const opponent = isWhite ? "black" : "white";
-    const [kingRow, kingCol] = getKingPosition(board, isWhite)
+    const { row: kingRow, col: kingCol } = getKingPosition(board, isWhite)
 
     //check if king is in check by a pawn
     const pawnDirection = isWhite ? -1 : 1;

@@ -1,114 +1,152 @@
-import { Board, Position } from "../types/types";
+import { isKingInCheck } from "../check/check";
+import { AllMoves, Board, Direction, Position } from "../types/types";
+import { applyMove } from "../utils";
 
-export function getRookMoves(board: Board, row: number, col: number, isWhite: boolean): [number, number][] {
+const BOARD_SIZE = 8;
+
+/**
+ * Checks if a position is within the bounds of the board
+ * @param row The row of the position
+ * @param col The column of the position
+ * @returns Whether the position is within the bounds of the board
+ */
+function isWithinBounds(row: number, col: number): boolean {
+    return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
+}
+
+/**
+ * Calculates all the possible moves for a given position on the board
+ * @param board The board to get the possible moves from
+ * @param position The position to get the possible moves from
+ * @param directions The directions to calculate the possible moves from
+ * @param isWhite Whether the color is white or black
+ * @returns An array of all the possible moves for the given position
+ */
+function moveCalculation(board: Board, position: Position, directions: Direction[], isWhite: boolean): Position[] {
     const opponent = isWhite ? "black" : "white";
-    const your_color = isWhite ? "white" : "black";
-    const moves: [number, number][] = [];
+    const yourColor = isWhite ? "white" : "black";
+    const moves: Position[] = [];
 
-    for (let i = row + 1; i < 8; i++) {
-        const piece = board[i][col]
-        if (piece && piece.startsWith(your_color)) {
-            break
-        } else if (piece && piece.startsWith(opponent)) {
-            moves.push([i, col])
-            break
+    for (const { row: dr, col: dc } of directions) {
+        let rowIndex = position.row + dr;
+        let colIndex = position.col + dc;
+
+        while (isWithinBounds(rowIndex, colIndex)) {
+            const piece = board[rowIndex][colIndex]
+            if (!piece) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: { row: rowIndex, col: colIndex } });
+                if (!isKingInCheck(newBoard, isWhite)) {
+                    moves.push({ row: rowIndex, col: colIndex });
+                }
+            } else if (piece.startsWith(opponent)) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: { row: rowIndex, col: colIndex } });
+                if (!isKingInCheck(newBoard, isWhite)) {
+                    moves.push({ row: rowIndex, col: colIndex });
+                }
+                break;
+            } else if (piece.startsWith(yourColor)) {
+                break;
+            }
+
+            rowIndex += dr;
+            colIndex += dc;
         }
 
-        moves.push([i, col])
-    }
-
-    for (let i = row - 1; i >= 0; i--) {
-        const piece = board[i][col]
-        if (piece && piece.startsWith(your_color)) {
-            break
-        } else if (piece && piece.startsWith(opponent)) {
-            moves.push([i, col])
-            break
-        }
-
-        moves.push([i, col])
-    }
-
-    for (let i = col + 1; i < 8; i++) {
-        const piece = board[row][i]
-        if (piece && piece.startsWith(your_color)) {
-            break
-        } else if (piece && piece.startsWith(opponent)) {
-            moves.push([row, i]);
-            break
-        }
-
-        moves.push([row, i])
-    }
-
-    for (let i = col - 1; i >= 0; i--) {
-        const piece = board[row][i]
-        if (piece && piece.startsWith(your_color)) {
-            break
-        } else if (piece && piece.startsWith(opponent)) {
-            moves.push([row, i]);
-            break
-        }
-
-        moves.push([row, i])
     }
 
     return moves;
 }
 
-export function getQueenMoves(board: Board, row: number, col: number, isWhite: boolean): [number, number][] {
-    const rookMoves: [number, number][] = getRookMoves(board, row, col, isWhite);
-    const bishopMoves: [number, number][] = getBishopMoves(board, row, col, isWhite);
-    const queenMoves: [number, number][] = [];
+/**
+* Gets all the possible rook moves for a given position on the board
+* @param board The board to get the possible rook moves from
+* @param position The position to get the possible rook moves from
+* @param isWhite Whether the rook is white or black
+* @returns An array of all the possible rook moves for the given position
+*/
+export function getRookMoves(board: Board, position: Position, isWhite: boolean): Position[] {
+    const directions: Direction[] = [{ row: 1, col: 0 }, { row: -1, col: 0 }, { row: 0, col: 1 }, { row: 0, col: -1 }];
+
+    return moveCalculation(board, position, directions, isWhite);
+}
+
+/**
+ * Gets all the possible queen moves for a given position on the board
+ * @param board The board to get the possible queen moves from
+ * @param position The position to get the possible queen moves from
+ * @param isWhite Whether the queen is white or black
+ * @returns An array of all the possible queen moves for the given position
+ */
+export function getQueenMoves(board: Board, postion: Position, isWhite: boolean): Position[] {
+    const rookMoves: Position[] = getRookMoves(board, postion, isWhite);
+    const bishopMoves: Position[] = getBishopMoves(board, postion, isWhite);
+    const queenMoves: Position[] = [];
 
     rookMoves.map((move) => queenMoves.push(move));
     bishopMoves.map((move) => queenMoves.push(move));
     return queenMoves;
 }
 
-export function getKingMoves(board: Board, row: number, col: number, isWhite: boolean): [number, number][] {
+/**
+ * Gets all the possible king moves for a given position on the board
+ * @param board The board to get the possible king moves from
+ * @param position The position to get the possible king moves from
+ * @param isWhite Whether the king is white or black
+ * @returns An array of all the possible king moves for the given position
+ */
+export function getKingMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const opponent: string = isWhite ? "black" : "white";
-    const directions = [
-        { row: -1, col: 0 },
-        { row: 1, col: 0 },
-        { row: 0, col: -1 },
-        { row: 0, col: 1 },
-        { row: -1, col: -1 },
-        { row: -1, col: 1 },
-        { row: 1, col: -1 },
-        { row: 1, col: 1 }
+    const yourColor: string = isWhite ? "white" : "black";
+    const moves: Position[] = [];
+    const directions: Direction[] = [
+        { row: -1, col: 0 }, { row: 1, col: 0 }, { row: 0, col: -1 }, { row: 0, col: 1 },
+        { row: -1, col: -1 }, { row: -1, col: 1 }, { row: 1, col: -1 }, { row: 1, col: 1 }
     ];
 
-    const kingMoves: [number, number][] = directions.map(dir => [row + dir.row, col + dir.col]);
+    for (const { row: row, col: col } of directions) {
+        const r = position.row + row;
+        const c = position.col + col;
 
-    return kingMoves.filter(([r, c]) => {
-        if (r >= 0 && r < 8 && c >= 0 && c < 8) {
-            const piece = board[r][c]
-            if (piece && piece.startsWith(opponent)) {
-                return true
-            } else if (piece === null) {
-                return true
+        if (isWithinBounds(r, c)) {
+            const piece = board[r][c];
+            if (!piece) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: { row: r, col: c } });
+                if (!isKingInCheck(newBoard, isWhite)) {
+                    moves.push({ row: r, col: c });
+                }
+            } else if (piece.startsWith(opponent)) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: { row: r, col: c } });
+                if (!isKingInCheck(newBoard, isWhite)) {
+                    moves.push({ row: r, col: c });
+                }
+                break;
+            } else if (piece.startsWith(yourColor)) {
+                break;
             }
         }
+    }
 
-        return false
-    });
+    return moves;
 }
 
-export function getPawnMoves(board: Board, row: number, col: number, isWhite: boolean): [number, number][] {
+/**
+ * Gets all the possible pawn moves for a given position on the board
+ * @param board The board to get the possible pawn moves from
+ * @param position The position to get the possible pawn moves from
+ * @param isWhite Whether the pawn is white or black
+ * @returns An array of all the possible pawn moves for the given position
+ */
+export function getPawnMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const opponent = isWhite ? "black" : "white";
-    const moves: [number, number][] = [];
+    const yourColor = isWhite ? "white" : "black";
+    const moves: Position[] = [];
     let whitePromotingAvailable: boolean = false;
     let blackPromotingAvailable: boolean = false;
     const pawnRowDirection = isWhite ? -1 : 1;
     const pawnStartColumn = isWhite ? 6 : 1;
     const pawnPromotionColumn = isWhite ? 1 : 6;
 
-    if (row === pawnStartColumn) {
-        moves.push([row + 2 * pawnRowDirection, col]);
-    }
-
-    if (row === pawnPromotionColumn) {
+    if (position.row === pawnPromotionColumn) {
         if (isWhite) {
             whitePromotingAvailable = true;
         } else {
@@ -116,138 +154,138 @@ export function getPawnMoves(board: Board, row: number, col: number, isWhite: bo
         }
     }
 
-    if (row + pawnRowDirection >= 0 && row + pawnRowDirection < 8) {
-        const piece = board[row + pawnRowDirection][col]
-        if (piece && piece === null) {
-            moves.push([row + pawnRowDirection, col]);
+    const oneSquareForward = { row: position.row + pawnRowDirection, col: position.col };
+    if (oneSquareForward.row >= 0 && oneSquareForward.row < 8 && !board[oneSquareForward.row][oneSquareForward.col]) {
+        const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: oneSquareForward });
+        if (!isKingInCheck(newBoard, isWhite)) {
+            moves.push(oneSquareForward);
+        }
+
+        const twoSquaresForward = { row: position.row + 2 * pawnRowDirection, col: position.col };
+        if (position.row === pawnStartColumn && !board[twoSquaresForward.row][twoSquaresForward.col]) {
+            const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: twoSquaresForward });
+            if (!isKingInCheck(newBoard, isWhite)) {
+                moves.push(twoSquaresForward);
+            }
         }
     }
 
-    if (row + pawnRowDirection >= 0 && row + pawnRowDirection < 8 && col + 1 < 8) {
-        const piece = board[row + pawnRowDirection][col + 1]
-        if (piece && piece.startsWith(opponent)) {
-            moves.push([row + pawnRowDirection, col + 1]);
-        }
-    }
+    const captureDirections = [{ row: pawnRowDirection, col: 1 }, { row: pawnRowDirection, col: -1 }];
+    for (const { row: dr, col: dc } of captureDirections) {
+        const target = { row: position.row + dr, col: position.col + dc };
 
-    if (row + pawnRowDirection >= 0 && row + pawnRowDirection < 8 && col - 1 >= 0) {
-        const piece = board[row + pawnRowDirection][col - 1]
-        if (piece && piece.startsWith(opponent)) {
-            moves.push([row + pawnRowDirection, col - 1]);
+        if (isWithinBounds(target.row, target.col)) {
+            const piece = board[target.row][target.col];
+            if (piece && piece.startsWith(opponent)) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: target });
+                if (!isKingInCheck(newBoard, isWhite)) {
+                    moves.push(target);
+                }
+                break;
+            } else if (piece && piece.startsWith(yourColor)) {
+                break;
+            }
         }
     }
 
     return moves;
 }
 
-export function getKnightMoves(board: Board, row: number, col: number, isWhite: boolean): [number, number][] {
+/**
+ * Gets all the possible knight moves for a given position on the board
+ * @param board The board to get the possible knight moves from
+ * @param position The position to get the possible knight moves from
+ * @param isWhite Whether the knight is white or black
+ * @returns An array of all the possible knight moves for the given position
+ */
+export function getKnightMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const opponent = isWhite ? "black" : "white";
-    const knightMoves: [number, number][] = [
-        [row + 2, col + 1], [row + 2, col - 1],
-        [row - 2, col + 1], [row - 2, col - 1],
-        [row + 1, col + 2], [row + 1, col - 2],
-        [row - 1, col + 2], [row - 1, col - 2]
+    const knightMoves: Position[] = [
+        { row: position.row + 2, col: position.col + 1 }, { row: position.row + 2, col: position.col - 1 },
+        { row: position.row - 2, col: position.col + 1 }, { row: position.row - 2, col: position.col - 1 },
+        { row: position.row + 1, col: position.col + 2 }, { row: position.row + 1, col: position.col - 2 },
+        { row: position.row - 1, col: position.col + 2 }, { row: position.row - 1, col: position.col - 2 }
     ];
 
-    return knightMoves.filter(([r, c]) => {
-        if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+    return knightMoves.filter(({ row: r, col: c }) => {
+        if (isWithinBounds(r, c)) {
             const piece = board[r][c]
-            if (piece && piece.startsWith(opponent) || piece === null) {
-                return true
+            if (!piece) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: { row: r, col: c } });
+                return !isKingInCheck(newBoard, isWhite);
+            } else if (piece.startsWith(opponent)) {
+                const newBoard = applyMove(board, { from: { row: position.row, col: position.col }, to: { row: r, col: c } });
+                return !isKingInCheck(newBoard, isWhite);
             }
+
+            return false;
         }
-        return false
     });
 }
 
-export function getBishopMoves(board: Board, row: number, col: number, isWhite: boolean): Position[] {
-    const opponent: string = isWhite ? "black" : "white";
-    const your_color: string = isWhite ? "white" : "black";
-    const moves: [number, number][] = [];
-
-    for (let i = 1; i < 8; i++) {
-        if (row + i < 8 && col + i < 8) {
-            const piece = board[row + i][col + i]
-            if (piece && piece.startsWith(opponent + "_")) {
-                moves.push([row + i, col + i])
-                break
-            } else if (piece && piece.startsWith(your_color + "_")) {
-                break
-            }
-
-            moves.push([row + i, col + i]);
-        }
-    }
-    for (let i = 1; i < 8; i++) {
-        if (row - i >= 0 && col + i < 8) {
-            const piece = board[row - i][col + i]
-            if (piece && piece.startsWith(opponent + "_")) {
-                moves.push([row - i, col + i]);
-                break
-            } else if (piece && piece.startsWith(your_color + "_")) {
-                break
-            }
-
-            moves.push([row - i, col + i]);
-        }
-    }
-    for (let i = 1; i < 8; i++) {
-        if (row + i < 8 && col - i >= 0) {
-            const piece = board[row + i][col - i]
-            if (piece && piece.startsWith(opponent + "_")) {
-                moves.push([row + i, col - i]);
-                break
-            } else if (piece && piece.startsWith(your_color + "_")) {
-                break
-            }
-
-            moves.push([row + i, col - i]);
-        }
-    }
-    for (let i = 1; i < 8; i++) {
-        if (row - i >= 0 && col - i >= 0) {
-            const piece = board[row - i][col - i]
-            if (piece && piece.startsWith(opponent + "_")) {
-                moves.push([row - i, col - i]);
-                break
-            } else if (piece && piece.startsWith(your_color + "_")) {
-                break
-            }
-
-            moves.push([row - i, col - i]);
-        }
-    }
-
-    return moves;
+/**
+* Gets all the possible bishop moves for a given position on the board
+* @param board The board to get the possible bishop moves from
+* @param position The position to get the possible bishop moves from
+* @param isWhite Whether the bishop is white or black
+* @returns An array of all the possible bishop moves for the given position
+*/
+export function getBishopMoves(board: Board, position: Position, isWhite: boolean): Position[] {
+    const directions: Direction[] = [
+        { row: 1, col: 1 }, { row: 1, col: -1 },
+        { row: -1, col: 1 }, { row: -1, col: -1 }
+    ];
+    return moveCalculation(board, position, directions, isWhite);
 }
 
-export function getAllOpponentMoves(board: Board, isWhite: boolean): Position[] {
+
+/**
+ * Gets all the possible moves for a given color on the board
+ * @param board The board to get the possible moves from
+ * @param isWhite Whether the color is white or black
+ * @returns An array of all the possible moves for the given color
+ */
+export function getAllOpponentMoves(board: Board, isWhite: boolean): AllMoves {
     const opponentColor = isWhite ? "black" : "white";
-    let moves: Position[] = [];
+    let moves: AllMoves = {
+        'white_pawn': [],
+        'white_rook': [],
+        'white_knight': [],
+        'white_bishop': [],
+        'white_queen': [],
+        'white_king': [],
+        'black_pawn': [],
+        'black_rook': [],
+        'black_knight': [],
+        'black_bishop': [],
+        'black_queen': [],
+        'black_king': []
+    };
 
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
             const piece = board[i][j]
             if (piece && piece.startsWith(opponentColor)) {
                 const pieceType = piece.split("_")[1];
+                const position = { row: i, col: j };
                 switch (pieceType) {
                     case 'pawn':
-                        moves.push(...getPawnMoves(board, i, j, !isWhite));
+                        moves[piece].push(...getPawnMoves(board, position, !isWhite));
                         break;
                     case 'rook':
-                        moves.push(...getRookMoves(board, i, j, !isWhite));
+                        moves[piece].push(...getRookMoves(board, position, !isWhite));
                         break;
                     case 'king':
-                        moves.push(...getKingMoves(board, i, j, !isWhite));
+                        moves[piece].push(...getKingMoves(board, position, !isWhite));
                         break;
                     case 'queen':
-                        moves.push(...getQueenMoves(board, i, j, !isWhite));
+                        moves[piece].push(...getQueenMoves(board, position, !isWhite));
                         break;
                     case 'knight':
-                        moves.push(...getKnightMoves(board, i, j, !isWhite));
+                        moves[piece].push(...getKnightMoves(board, position, !isWhite));
                         break;
                     case 'bishop':
-                        moves.push(...getBishopMoves(board, i, j, !isWhite));
+                        moves[piece].push(...getBishopMoves(board, position, !isWhite));
                         break;
                     default:
                         console.log("error");
@@ -258,16 +296,3 @@ export function getAllOpponentMoves(board: Board, isWhite: boolean): Position[] 
 
     return moves;
 }
-
-const newBoard: Board = [
-    [null, null, null, 'black_king', null, null, null, null, null],
-    [null, null, null, 'black_rook', null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, 'black_bishop', null, null, null, null, null, null],
-    [null, null, 'white_bishop', 'white_bishop', null, null, null, null],
-    [null, null, null, 'white_king', null, null, null, null],
-]
-
-console.log(getAllOpponentMoves(newBoard, false))

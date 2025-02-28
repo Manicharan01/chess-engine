@@ -1,5 +1,4 @@
-import { MoveTracker } from "./moveTracker";
-import { Position } from "./types/moveTypes";
+import { Position } from "./types/types";
 
 export interface CastlingMove {
     kingFrom: Position;
