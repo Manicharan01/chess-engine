@@ -37,17 +37,16 @@ export interface Move {
 };
 
 /**
+ * Represents a list of moves
+ */
+export type Moves = Map<Position, Position[]>;
+
+/**
  * Represents a direction on the board
  */
 export interface Direction {
     row: number;
     col: number;
-}
-
-export type NonNullPiece = Exclude<Piece, null>;
-
-export type AllMoves = {
-    [key in NonNullPiece]: Position[];
 }
 
 export interface PieceMove {
