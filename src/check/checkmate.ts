@@ -1,7 +1,14 @@
 import { getKingMoves } from "../possibleMoves/moveGenerator";
-import { Board, Position } from "../types/types";
+import { Position } from "../types/types";
 import { getKingPosition } from "./check";
+import { Board } from "../index";
 
+/**
+ * Checks if the king is in checkmate
+ * @param board The board to check
+ * @param isWhite Whether the king is white or black
+ * @returns Whether the king is in checkmate
+ */
 export function checkmate(board: Board, isWhite: boolean): boolean {
     let kingPosition: Position = getKingPosition(board, isWhite)
 

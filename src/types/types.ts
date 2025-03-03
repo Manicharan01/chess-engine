@@ -11,12 +11,12 @@ export interface CastlingRights {
 /**
  * Represents the state of the game
  */
-export type Piece = 'white_pawn' | 'white_rook' | 'white_knight' | 'white_bishop' | 'white_queen' | 'white_king' | 'black_pawn' | 'black_rook' | 'black_knight' | 'black_bishop' | 'black_queen' | 'black_king' | null;
+export type PieceType = 'white_pawn' | 'white_rook' | 'white_knight' | 'white_bishop' | 'white_queen' | 'white_king' | 'black_pawn' | 'black_rook' | 'black_knight' | 'black_bishop' | 'black_queen' | 'black_king' | null;
 
 /**
  * Represents the state of the board
  */
-export type Board = Piece[][]
+export type BoardType = PieceType[][]
 
 /**
  * Represents a position on the board
@@ -68,3 +68,7 @@ export interface PieceTracker {
     originalPosition: Position;
 }
 
+/**
+ * Represents the state of a player on the board
+ */
+export type Color = 'white' | 'black' | null;

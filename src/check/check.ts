@@ -1,4 +1,5 @@
-import { Board, Position } from "../types/types";
+import { Position } from "../types/types";
+import { Board } from "../index";
 
 /**
 * Gets the king position on the board based on the color of the king
@@ -11,8 +12,8 @@ export function getKingPosition(board: Board, isWhite: boolean): Position {
     let kingPosition: Position = { row: -1, col: -1 }
     outer: for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-            const piece = board[i][j]
-            if (piece && piece === kingColor + "_king") {
+            const piece = board.getPiece({ row: i, col: j })
+            if (piece && piece.color === kingColor && piece.type === "king") {
                 kingPosition = { row: i, col: j }
                 break outer
             }
@@ -45,8 +46,8 @@ export function isKingInCheck(board: Board, isWhite: boolean): boolean {
     if (pawnRow >= 0 && pawnRow < 8) {
         for (const col of pawnAttackCols) {
             if (col >= 0 && col < 8) {
-                const piece = board[pawnRow][col]
-                if (piece && piece === opponent + "_pawn") {
+                const piece = board.getPiece({ row: pawnRow, col: col })
+                if (piece && piece.color === opponent && piece.type === "pawn") {
                     return true
                 }
             }
@@ -63,8 +64,8 @@ export function isKingInCheck(board: Board, isWhite: boolean): boolean {
         const colIndex = kingCol + col;
 
         if (rowIndex >= 0 && rowIndex < 8 && colIndex >= 0 && colIndex < 8) {
-            const piece = board[rowIndex][colIndex]
-            if (piece && piece === opponent + "_knight") {
+            const piece = board.getPiece({ row: rowIndex, col: colIndex })
+            if (piece && piece.color === opponent && piece.type === "knight") {
                 return true;
             }
         }
@@ -83,10 +84,10 @@ export function isKingInCheck(board: Board, isWhite: boolean): boolean {
         let distance = 1;
 
         while (rowIndex >= 0 && rowIndex < 8 && colIndex >= 0 && colIndex < 8) {
-            const piece = board[rowIndex][colIndex]
+            const piece = board.getPiece({ row: rowIndex, col: colIndex })
             if (piece) {
-                if (piece.startsWith(opponent)) {
-                    const pieceType = piece.split("_")[1];
+                if (piece.color === opponent) {
+                    const pieceType = piece.type;
 
                     if (pieceType === "queen" ||
                         (pieceType === "rook" && (rowIndex === kingRow || colIndex === kingCol)) ||
