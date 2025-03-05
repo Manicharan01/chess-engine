@@ -1,11 +1,12 @@
 import { getAllMoves } from "../possibleMoves/moveGenerator";
-import { Board } from "../index";
+import { Game } from "../index";
 import { isKingInCheck } from "./check";
 
-export function isStalemate(board: Board, isWhite: boolean): boolean {
+export function isStalemate(game: Game, isWhite: boolean): boolean {
+    const board = game.gameState.board;
     if (isKingInCheck(board, isWhite)) return false;
 
-    const allMoves = getAllMoves(board, isWhite);
+    const allMoves = getAllMoves(game, isWhite);
 
-    return false;
+    return Array.from(allMoves.values()).every(moves => moves.length === 0);
 }

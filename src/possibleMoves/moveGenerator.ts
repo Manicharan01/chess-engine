@@ -98,7 +98,8 @@ export function getQueenMoves(board: Board, postion: Position, isWhite: boolean)
  * @param isWhite Whether the king is white or black
  * @returns An array of all the possible king moves for the given position
  */
-export function getKingMoves(board: Board, position: Position, isWhite: boolean): Position[] {
+export function getKingMoves(game: Game, position: Position, isWhite: boolean): Position[] {
+    const board = game.gameState.board;
     const opponent: string = isWhite ? "black" : "white";
     const yourColor: string = isWhite ? "white" : "black";
     const moves: Position[] = [];
@@ -106,6 +107,14 @@ export function getKingMoves(board: Board, position: Position, isWhite: boolean)
         { row: -1, col: 0 }, { row: 1, col: 0 }, { row: 0, col: -1 }, { row: 0, col: 1 },
         { row: -1, col: -1 }, { row: -1, col: 1 }, { row: 1, col: -1 }, { row: 1, col: 1 }
     ];
+
+    const castlingRights = game.gameState.castlingRights[yourColor];
+    if (castlingRights.kingSide) {
+        moves.push({ row: position.row, col: position.col + 2 });
+    }
+    if (castlingRights.queenSide) {
+        moves.push({ row: position.row, col: position.col - 2 });
+    }
 
     const currentPiece = board.getPiece(position);
     if (currentPiece) {
@@ -273,7 +282,8 @@ export function getBishopMoves(board: Board, position: Position, isWhite: boolea
  * @param isWhite Whether the color is white or black
  * @returns An array of all the possible moves for the given color
  */
-export function getAllMoves(board: Board, isWhite: boolean): Moves {
+export function getAllMoves(game: Game, isWhite: boolean): Moves {
+    const board = game.gameState.board;
     const opponentColor = isWhite ? "black" : "white";
     let moves: Moves = new Map<Position, Position[]>();
 
@@ -291,7 +301,7 @@ export function getAllMoves(board: Board, isWhite: boolean): Moves {
                         moves.set(position, getRookMoves(board, position, isWhite));
                         break;
                     case 'king':
-                        moves.set(position, getKingMoves(board, position, isWhite));
+                        moves.set(position, getKingMoves(game, position, isWhite));
                         break;
                     case 'queen':
                         moves.set(position, getQueenMoves(board, position, isWhite));
@@ -303,7 +313,7 @@ export function getAllMoves(board: Board, isWhite: boolean): Moves {
                         moves.set(position, getBishopMoves(board, position, isWhite));
                         break;
                     default:
-                        console.log("error");
+                        console.log("Invalid piece type: " + piece.type);
                 }
             }
         }
