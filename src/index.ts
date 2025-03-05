@@ -1,5 +1,5 @@
 import { isKingInCheck } from "./check/check";
-import { isValidBishopMove, isValidKingMove, isValidKnightMove, isValidPawnMove, isValidQueenMove, isValidRookMove } from "./helper";
+import { enPassantTest, isValidBishopMove, isValidKingMove, isValidKnightMove, isValidPawnMove, isValidQueenMove, isValidRookMove } from "./helper";
 import { Color, Move, Position } from "./types/types";
 
 export const BOARD_SIZE = 8;
@@ -65,8 +65,8 @@ export class GameState {
     currentPlayer: string;
     moveHistory: Move[] = [];
     castlingRights: { [color: string]: { kingSide: boolean, queenSide: boolean } } = {
-        white: { kingSide: true, queenSide: true },
-        black: { kingSide: true, queenSide: true }
+        "white": { kingSide: true, queenSide: true },
+        "black": { kingSide: true, queenSide: true }
     };
     enPassantSquare: Position | null = null;
 
@@ -84,6 +84,9 @@ export class GameState {
             return false;
         }
 
+        const validateMove = this.validateMoveByPieceType(move, piece);
+        if (!validateMove) return false;
+
         const clonedBoard = this.board.clone();
         const clonedPiece = clonedBoard.getPiece(from);
         if (clonedPiece) {
@@ -97,8 +100,12 @@ export class GameState {
             return false;
         }
 
+        return true;
+    }
+
+    private validateMoveByPieceType(move: Move, piece: Piece) {
         switch (piece!.type) {
-            case "pawn": return isValidPawnMove(move, this.board, this.currentPlayer === "white")
+            case "pawn": return isValidPawnMove(move, this.board, this.currentPlayer === "white", this.moveHistory);
             case "rook": return isValidRookMove(move, this.board);
             case "knight": return isValidKnightMove(move, this.board);
             case "bishop": return isValidBishopMove(move, this.board);
@@ -128,10 +135,52 @@ export class GameState {
             throw new Error("Moving to an occupied position which is captured")
         };
         if (opponentPiece) opponentPiece.isCaptured = true;
+
+        if (piece?.type === "king" || piece?.type === "rook") {
+            this.updateCastlingRights(move);
+        }
+
+        if (piece?.type === "king" && Math.abs(to.col - from.col) === 2) {
+            const rookSide = to.col === 6 ? 7 : 0;
+            const rookEndCol = to.col === 6 ? 5 : 3;
+            const rook = this.board.getPiece({ row: from.row, col: rookSide });
+
+            if (rook) {
+                this.board.setPiece({ row: from.row, col: rookEndCol }, rook);
+                this.board.setPiece({ row: from.row, col: rookSide }, null);
+            }
+        }
+
         this.board.setPiece(to, piece);
         this.board.setPiece(from, null);
         this.moveHistory.push(move);
+
+        if (piece?.type === "pawn" && Math.abs(from.row - to.row) === 2) {
+            this.enPassantSquare = { row: (to.row + from.row) / 2, col: from.col };
+        } else {
+            this.enPassantSquare = null;
+        }
+
         this.currentPlayer = this.currentPlayer === "white" ? "black" : "white";
+    }
+
+    updateCastlingRights(move: Move) {
+        const { from, to } = move;
+        const piece = this.board.getPiece(from);
+        if (piece?.type === "king") {
+            this.castlingRights[piece?.color] = {
+                kingSide: false,
+                queenSide: false
+            };
+        }
+        if (piece?.type === "rook") {
+            const rookSide = piece?.startPosition?.col === 0 ? "queenSide" :
+                (piece?.startPosition?.col === 7 ? "kingSide" : null);
+
+            if (rookSide) {
+                this.castlingRights[piece?.color][rookSide] = false;
+            }
+        }
     }
 }
 
@@ -142,3 +191,10 @@ export class Game {
         this.gameState = new GameState();
     }
 }
+
+const game = new Game();
+enPassantTest(game);
+game.gameState.makeMove({ from: { row: 6, col: 0 }, to: { row: 4, col: 0 } });
+console.log(game.gameState.moveHistory)
+game.gameState.makeMove({ from: { row: 4, col: 1 }, to: { row: 5, col: 0 } });
+// game.gameState.board.display();

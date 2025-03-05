@@ -9,7 +9,7 @@ import { isWithinBounds } from "./utils";
  * @param isWhite true if the player is white, false otherwise
  * @returns true if the pawn can move forward, false otherwise
  */
-export function isValidPawnMove(move: Move, board: Board, isWhite: boolean): boolean {
+export function isValidPawnMove(move: Move, board: Board, isWhite: boolean, moveHistory: Move[]): boolean {
     const { from, to } = move;
     const piece = board.getPiece(from);
 
@@ -42,6 +42,22 @@ export function isValidPawnMove(move: Move, board: Board, isWhite: boolean): boo
         board.getPiece(to) !== null &&
         board.getPiece(to)?.color !== piece.color
     ) {
+        return true;
+    }
+
+    // Check for En Passant
+    const lastMove = moveHistory[moveHistory.length - 1];
+    if (
+        Math.abs(to.col - from.col) === 1 &&
+        to.row === from.row + direction &&
+        board.getPiece(to) === null &&
+        lastMove &&
+        lastMove.from.col === to.col &&
+        lastMove.from.row === lastMove.to.row - direction * 2 &&
+        board.getPiece({ row: from.row, col: to.col })?.color !== piece.color &&
+        board.getPiece({ row: from.row, col: to.col })?.type === "pawn"
+    ) {
+        console.log("En passant");
         return true;
     }
 
@@ -214,6 +230,25 @@ export function intializeBoard(game: Game) {
             game.gameState.board.setPiece({ row: i, col: j }, null);
         }
     }
+
+    game.gameState.currentPlayer = "white";
+}
+
+export function enPassantTest(game: Game) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            game.gameState.board.setPiece({ row: i, col: j }, null);
+        }
+    }
+
+    const whitePawn = new Piece("white", 'pawn', { row: 6, col: 0 }, { row: 6, col: 0 }, false);
+    game.gameState.board.setPiece({ row: 6, col: 0 }, whitePawn);
+    const blackPawn = new Piece("black", 'pawn', { row: 4, col: 1 }, { row: 4, col: 1 }, false);
+    game.gameState.board.setPiece({ row: 4, col: 1 }, blackPawn);
+    const whiteKing = new Piece("white", 'king', { row: 7, col: 4 }, { row: 7, col: 4 }, false);
+    game.gameState.board.setPiece({ row: 7, col: 4 }, whiteKing);
+    const blackKing = new Piece("black", 'king', { row: 0, col: 4 }, { row: 0, col: 4 }, false);
+    game.gameState.board.setPiece({ row: 0, col: 4 }, blackKing);
 
     game.gameState.currentPlayer = "white";
 }
