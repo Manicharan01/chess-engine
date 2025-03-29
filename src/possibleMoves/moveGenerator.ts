@@ -1,6 +1,6 @@
-import { Board, Game, Piece } from "../index"
+import { Board, Game } from "../index"
 import { isKingInCheck } from "../check/check";
-import { BoardType, Direction, Move, Moves, Position } from "../types/types";
+import { Direction, Moves, Position } from "../types/types";
 import { applyMove } from "../utils";
 import { isWithinBounds } from "../utils";
 
@@ -63,7 +63,6 @@ export function getRookMoves(board: Board, position: Position, isWhite: boolean)
     } else {
         console.error("Invalid position");
         throw new Error("Invalid position");
-        return [];
     }
 }
 
@@ -87,7 +86,6 @@ export function getQueenMoves(board: Board, postion: Position, isWhite: boolean)
     } else {
         console.error("Invalid position");
         throw new Error("Invalid position");
-        return [];
     }
 }
 

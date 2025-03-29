@@ -151,6 +151,11 @@ export class GameState {
             }
         }
 
+        if (this.enPassantSquare && this.enPassantSquare.row === to.row && this.enPassantSquare.col === to.col) {
+            let enPassantedPiecePos = this.moveHistory[this.moveHistory.length - 1].to
+            this.board.setPiece(enPassantedPiecePos, null);
+        }
+
         this.board.setPiece(to, piece);
         this.board.setPiece(from, null);
         this.moveHistory.push(move);
@@ -195,6 +200,5 @@ export class Game {
 const game = new Game();
 enPassantTest(game);
 game.gameState.makeMove({ from: { row: 6, col: 0 }, to: { row: 4, col: 0 } });
-console.log(game.gameState.moveHistory)
 game.gameState.makeMove({ from: { row: 4, col: 1 }, to: { row: 5, col: 0 } });
-// game.gameState.board.display();
+game.gameState.board.display();

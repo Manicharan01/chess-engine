@@ -53,11 +53,10 @@ export function isValidPawnMove(move: Move, board: Board, isWhite: boolean, move
         board.getPiece(to) === null &&
         lastMove &&
         lastMove.from.col === to.col &&
-        lastMove.from.row === lastMove.to.row - direction * 2 &&
+        lastMove.from.row === lastMove.to.row + direction * 2 &&
         board.getPiece({ row: from.row, col: to.col })?.color !== piece.color &&
         board.getPiece({ row: from.row, col: to.col })?.type === "pawn"
     ) {
-        console.log("En passant");
         return true;
     }
 
@@ -251,4 +250,17 @@ export function enPassantTest(game: Game) {
     game.gameState.board.setPiece({ row: 0, col: 4 }, blackKing);
 
     game.gameState.currentPlayer = "white";
+}
+
+export function checkingIsSquareBeingAttacked(game: Game) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            game.gameState.board.setPiece({ row: i, col: j }, null);
+        }
+    }
+
+    const whiteKing = new Piece("white", 'king', { row: 7, col: 0 }, { row: 7, col: 0 }, false);
+    game.gameState.board.setPiece({ row: 7, col: 0 }, whiteKing);
+    const blackKing = new Piece("black", 'king', { row: 7, col: 6 }, { row: 7, col: 6 }, false);
+    game.gameState.board.setPiece({ row: 7, col: 6 }, blackKing);
 }
