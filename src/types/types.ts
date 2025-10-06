@@ -20,6 +20,7 @@ export type BoardType = PieceType[][]
 
 /**
  * Represents a position on the board
+ * bluePrint -> {row: Number, col: Number}
  * @property row The row of the position
  * @property col The column of the position
  */
@@ -30,6 +31,9 @@ export interface Position {
 
 /**
  * Represents a move made on the board, from one position to another
+ * bluePrint -> {from: {row: Number, col: Number}, to: {row: Number, col: Number}}
+ * @property from co-ordinates of piece
+ * @property to co-ordinates of piece
  */
 export interface Move {
     from: Position;
