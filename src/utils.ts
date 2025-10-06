@@ -116,3 +116,14 @@ export function isTheSquareBeingAttacked(game: Game, position: Position): boolea
 
     return false;
 }
+
+export function isPathClear(game: Game, path: Position[]): boolean {
+    for (const position of path) {
+        const piece = game.gameState.board.getPiece(position);
+        if (piece) {
+            return false;
+        }
+    }
+
+    return true;
+}

@@ -1,5 +1,5 @@
 import { isKingInCheck } from "./check/check";
-import { enPassantTest, isValidBishopMove, isValidKingMove, isValidKnightMove, isValidPawnMove, isValidQueenMove, isValidRookMove } from "./helper";
+import { enPassantTest, intializeBoard, intializeCastlingBoard, isValidBishopMove, isValidKingMove, isValidKnightMove, isValidPawnMove, isValidQueenMove, isValidRookMove } from "./helper";
 import { Color, Move, Position } from "./types/types";
 
 export const BOARD_SIZE = 8;
@@ -198,7 +198,11 @@ export class Game {
 }
 
 const game = new Game();
-enPassantTest(game);
-game.gameState.makeMove({ from: { row: 6, col: 0 }, to: { row: 4, col: 0 } });
-game.gameState.makeMove({ from: { row: 4, col: 1 }, to: { row: 5, col: 0 } });
-game.gameState.board.display();
+// intializeBoard(game)
+// game.gameState.makeMove({ from: { row: 6, col: 3 }, to: { row: 4, col: 3 } })
+// game.gameState.makeMove({ from: { row: 1, col: 0 }, to: { row: 3, col: 0 } })
+// game.gameState.makeMove({ from: { row: 4, col: 3 }, to: { row: 3, col: 3 } })
+// game.gameState.makeMove({ from: { row: 1, col: 2 }, to: { row: 3, col: 2 } })
+// game.gameState.makeMove({ from: { row: 3, col: 3 }, to: { row: 2, col: 2 } })
+intializeCastlingBoard(game)
+game.gameState.board.display()

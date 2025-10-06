@@ -264,3 +264,18 @@ export function checkingIsSquareBeingAttacked(game: Game) {
     const blackKing = new Piece("black", 'king', { row: 7, col: 6 }, { row: 7, col: 6 }, false);
     game.gameState.board.setPiece({ row: 7, col: 6 }, blackKing);
 }
+
+export function intializeCastlingBoard(game: Game) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            game.gameState.board.setPiece({ row: i, col: j }, null);
+        }
+    }
+
+    const whiteKing = new Piece("white", 'king', { row: 7, col: 4 }, { row: 7, col: 4 }, false);
+    game.gameState.board.setPiece({ row: 7, col: 4 }, whiteKing);
+    const blackKing = new Piece("black", 'king', { row: 0, col: 4 }, { row: 0, col: 4 }, false);
+    game.gameState.board.setPiece({ row: 0, col: 4 }, blackKing);
+    const whiteRook = new Piece("white", 'rook', { row: 7, col: 7 }, { row: 7, col: 7 }, false);
+    game.gameState.board.setPiece({ row: 7, col: 7 }, whiteRook);
+}
