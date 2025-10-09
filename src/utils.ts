@@ -117,6 +117,12 @@ export function isTheSquareBeingAttacked(game: Game, position: Position): boolea
     return false;
 }
 
+/**
+ * Checks if there are any pieces on the path
+ * @param game The game to check
+ * @param path The path to check
+ * @returns True if the path is clear, false otherwise
+ */
 export function isPathClear(game: Game, path: Position[]): boolean {
     for (const position of path) {
         const piece = game.gameState.board.getPiece(position);
@@ -126,4 +132,20 @@ export function isPathClear(game: Game, path: Position[]): boolean {
     }
 
     return true;
+}
+
+/**
+ * Checks if given Positions are being attacked by the opponent
+ * @param game The game to check
+ * @param positions The positions to check
+ * @returns True if the positions are being attacked, false otherwise
+ */
+export function isPathAttacked(game: Game, path: Position[]): boolean {
+    for (const position of path) {
+        if (isTheSquareBeingAttacked(game, position)) {
+            return true;
+        }
+    }
+
+    return false;
 }
