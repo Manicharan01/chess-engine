@@ -2,10 +2,11 @@ import { Position } from "../types/types";
 import { Board } from "../index";
 
 /**
-* Gets the king position on the board based on the color of the king
-* @param board The board to get the king position from
-* @param isWhite Whether the king is white or black
-* @returns The position of the king on the board
+* Gets the king's position on the board based on its color.
+* @param board The board to get the king's position from.
+* @param isWhite Whether the king is white or black.
+* @returns The position of the king on the board.
+* @throws An error if the king is not found on the board.
 */
 export function getKingPosition(board: Board, isWhite: boolean): Position {
     const kingColor = isWhite ? "white" : "black";
@@ -29,10 +30,10 @@ export function getKingPosition(board: Board, isWhite: boolean): Position {
 }
 
 /**
-    * Checks if the king is in check
-    * @param board The board to check
-    * @param isWhite Whether the king is white or black
-    * @returns true if the king is in check, false otherwise
+    * Checks if the king is in check.
+    * @param board The board to check.
+    * @param isWhite Whether the king is white or black.
+    * @returns True if the king is in check, false otherwise.
 */
 export function isKingInCheck(board: Board, isWhite: boolean): boolean {
     const opponent = isWhite ? "black" : "white";

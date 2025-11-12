@@ -2,19 +2,19 @@ import { Move, Position } from "./types/types";
 import { Board, BOARD_SIZE, Game } from "./index";
 
 /**
- * Deep copies a board
- * @param board The board to deep copy
- * @returns A deep copy of the board
+ * Creates a deep copy of the board.
+ * @param board The board to deep copy.
+ * @returns A new board instance that is a deep copy of the original board.
  */
 export function deepCopyBoard(board: Board): Board {
     return board.clone();
 }
 
 /**
- * Applies a move to a board
- * @param board The board to apply the move to
- * @param move The move to apply
- * @returns A new board with the move applied
+ * Applies a move to a given board.
+ * @param board The board to apply the move to.
+ * @param move The move to apply.
+ * @returns A new board with the move applied.
  */
 export function applyMove(board: Board, move: Move): Board {
     let newBoard = deepCopyBoard(board);
@@ -28,20 +28,20 @@ export function applyMove(board: Board, move: Move): Board {
 }
 
 /**
- * Checks if a position is within the bounds of the board
- * @param row The row of the position
- * @param col The column of the position
- * @returns Whether the position is within the bounds of the board
+ * Checks if a position is within the bounds of the board.
+ * @param row The row of the position.
+ * @param col The column of the position.
+ * @returns True if the position is within the bounds of the board, false otherwise.
  */
 export function isWithinBounds(row: number, col: number): boolean {
     return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
 }
 
 /**
- * Checks if a position is being attacked by the opponent
- * @param game The game to check
- * @param position The position to check
- * @returns True if the position is being attacked, false otherwise
+ * Checks if a square is being attacked by the opponent.
+ * @param game The game instance.
+ * @param position The position of the square to check.
+ * @returns True if the square is being attacked, false otherwise.
  */
 export function isTheSquareBeingAttacked(game: Game, position: Position): boolean {
     const board = game.gameState.board;
@@ -118,10 +118,10 @@ export function isTheSquareBeingAttacked(game: Game, position: Position): boolea
 }
 
 /**
- * Checks if there are any pieces on the path
- * @param game The game to check
- * @param path The path to check
- * @returns True if the path is clear, false otherwise
+ * Checks if a path is clear of any pieces.
+ * @param game The game instance.
+ * @param path The path to check, represented as an array of positions.
+ * @returns True if the path is clear, false otherwise.
  */
 export function isPathClear(game: Game, path: Position[]): boolean {
     for (const position of path) {
@@ -135,10 +135,10 @@ export function isPathClear(game: Game, path: Position[]): boolean {
 }
 
 /**
- * Checks if given Positions are being attacked by the opponent
- * @param game The game to check
- * @param positions The positions to check
- * @returns True if the positions are being attacked, false otherwise
+ * Checks if any of the squares in a path are being attacked by the opponent.
+ * @param game The game instance.
+ * @param path The path to check, represented as an array of positions.
+ * @returns True if any square in the path is being attacked, false otherwise.
  */
 export function isPathAttacked(game: Game, path: Position[]): boolean {
     for (const position of path) {

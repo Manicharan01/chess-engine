@@ -5,12 +5,13 @@ import { applyMove } from "../utils";
 import { isWithinBounds } from "../utils";
 
 /**
- * Calculates all the possible moves for a given position on the board
- * @param board The board to get the possible moves from
- * @param position The position to get the possible moves from
- * @param directions The directions to calculate the possible moves from
- * @param isWhite Whether the color is white or black
- * @returns An array of all the possible moves for the given position
+ * Calculates all the possible moves for a given position on the board.
+ * @param board The board to get the possible moves from.
+ * @param position The position to get the possible moves from.
+ * @param directions The directions to calculate the possible moves from.
+ * @param isWhite Whether the color is white or black.
+ * @returns An array of all the possible moves for the given position.
+ * @hidden
  */
 function moveCalculation(board: Board, position: Position, directions: Direction[], isWhite: boolean): Position[] {
     const opponent = isWhite ? "black" : "white";
@@ -48,11 +49,11 @@ function moveCalculation(board: Board, position: Position, directions: Direction
 }
 
 /**
-* Gets all the possible rook moves for a given position on the board
-* @param board The board to get the possible rook moves from
-* @param position The position to get the possible rook moves from
-* @param isWhite Whether the rook is white or black
-* @returns An array of all the possible rook moves for the given position
+* Gets all the possible rook moves for a given position on the board.
+* @param board The board to get the possible rook moves from.
+* @param position The position to get the possible rook moves from.
+* @param isWhite Whether the rook is white or black.
+* @returns An array of all the possible rook moves for the given position.
 */
 export function getRookMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const directions: Direction[] = [{ row: 1, col: 0 }, { row: -1, col: 0 }, { row: 0, col: 1 }, { row: 0, col: -1 }];
@@ -67,11 +68,11 @@ export function getRookMoves(board: Board, position: Position, isWhite: boolean)
 }
 
 /**
- * Gets all the possible queen moves for a given position on the board
- * @param board The board to get the possible queen moves from
- * @param position The position to get the possible queen moves from
- * @param isWhite Whether the queen is white or black
- * @returns An array of all the possible queen moves for the given position
+ * Gets all the possible queen moves for a given position on the board.
+ * @param board The board to get the possible queen moves from.
+ * @param position The position to get the possible queen moves from.
+ * @param isWhite Whether the queen is white or black.
+ * @returns An array of all the possible queen moves for the given position.
  */
 export function getQueenMoves(board: Board, postion: Position, isWhite: boolean): Position[] {
     const rookMoves: Position[] = getRookMoves(board, postion, isWhite);
@@ -90,11 +91,11 @@ export function getQueenMoves(board: Board, postion: Position, isWhite: boolean)
 }
 
 /**
- * Gets all the possible king moves for a given position on the board
- * @param board The board to get the possible king moves from
- * @param position The position to get the possible king moves from
- * @param isWhite Whether the king is white or black
- * @returns An array of all the possible king moves for the given position
+ * Gets all the possible king moves for a given position on the board.
+ * @param game The game instance.
+ * @param position The position to get the possible king moves from.
+ * @param isWhite Whether the king is white or black.
+ * @returns An array of all the possible king moves for the given position.
  */
 export function getKingMoves(game: Game, position: Position, isWhite: boolean): Position[] {
     const board = game.gameState.board;
@@ -147,11 +148,11 @@ export function getKingMoves(game: Game, position: Position, isWhite: boolean): 
 }
 
 /**
- * Gets all the possible pawn moves for a given position on the board
- * @param board The board to get the possible pawn moves from
- * @param position The position to get the possible pawn moves from
- * @param isWhite Whether the pawn is white or black
- * @returns An array of all the possible pawn moves for the given position
+ * Gets all the possible pawn moves for a given position on the board.
+ * @param board The board to get the possible pawn moves from.
+ * @param position The position to get the possible pawn moves from.
+ * @param isWhite Whether the pawn is white or black.
+ * @returns An array of all the possible pawn moves for the given position.
  */
 export function getPawnMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const opponent = isWhite ? "black" : "white";
@@ -215,11 +216,11 @@ export function getPawnMoves(board: Board, position: Position, isWhite: boolean)
 }
 
 /**
- * Gets all the possible knight moves for a given position on the board
- * @param board The board to get the possible knight moves from
- * @param position The position to get the possible knight moves from
- * @param isWhite Whether the knight is white or black
- * @returns An array of all the possible knight moves for the given position
+ * Gets all the possible knight moves for a given position on the board.
+ * @param board The board to get the possible knight moves from.
+ * @param position The position to get the possible knight moves from.
+ * @param isWhite Whether the knight is white or black.
+ * @returns An array of all the possible knight moves for the given position.
  */
 export function getKnightMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const opponent = isWhite ? "black" : "white";
@@ -253,11 +254,11 @@ export function getKnightMoves(board: Board, position: Position, isWhite: boolea
 }
 
 /**
-* Gets all the possible bishop moves for a given position on the board
-* @param board The board to get the possible bishop moves from
-* @param position The position to get the possible bishop moves from
-* @param isWhite Whether the bishop is white or black
-* @returns An array of all the possible bishop moves for the given position
+* Gets all the possible bishop moves for a given position on the board.
+* @param board The board to get the possible bishop moves from.
+* @param position The position to get the possible bishop moves from.
+* @param isWhite Whether the bishop is white or black.
+* @returns An array of all the possible bishop moves for the given position.
 */
 export function getBishopMoves(board: Board, position: Position, isWhite: boolean): Position[] {
     const directions: Direction[] = [
@@ -275,10 +276,10 @@ export function getBishopMoves(board: Board, position: Position, isWhite: boolea
 
 
 /**
- * Gets all the possible moves for a given color on the board
- * @param board The board to get the possible moves from
- * @param isWhite Whether the color is white or black
- * @returns An array of all the possible moves for the given color
+ * Gets all the possible moves for a given color on the board.
+ * @param game The game instance.
+ * @param isWhite Whether the color is white or black.
+ * @returns A map of all the possible moves for the given color, where the key is the starting position of the piece and the value is an array of possible ending positions.
  */
 export function getAllMoves(game: Game, isWhite: boolean): Moves {
     const board = game.gameState.board;

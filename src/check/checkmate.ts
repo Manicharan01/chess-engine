@@ -3,10 +3,10 @@ import { getKingPosition, isKingInCheck } from "./check";
 import { Game } from "../index";
 
 /**
- * Checks if the king is in checkmate
- * @param board The board to check
- * @param isWhite Whether the king is white or black
- * @returns Whether the king is in checkmate
+ * Checks if the king is in checkmate.
+ * @param game The game instance.
+ * @param isWhite Whether the king is white or black.
+ * @returns True if the king is in checkmate, false otherwise.
  */
 export function checkmate(game: Game, isWhite: boolean): boolean {
     const board = game.gameState.board;

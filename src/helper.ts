@@ -1,13 +1,14 @@
 import { Game, Board, Piece, BOARD_SIZE } from "./index";
-import { Move } from "./types/types";
+import { Move, Position } from "./types/types";
 import { isWithinBounds } from "./utils";
 
 /**
- * Checks if the pawn can move forward
- * @param move
- * @param board the current board state
- * @param isWhite true if the player is white, false otherwise
- * @returns true if the pawn can move forward, false otherwise
+ * Checks if a pawn move is valid.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @param isWhite True if the player is white, false otherwise.
+ * @param moveHistory The history of moves made in the game.
+ * @returns True if the pawn move is valid, false otherwise.
  */
 export function isValidPawnMove(move: Move, board: Board, isWhite: boolean, moveHistory: Move[]): boolean {
     const { from, to } = move;
@@ -63,6 +64,13 @@ export function isValidPawnMove(move: Move, board: Board, isWhite: boolean, move
     return false;
 }
 
+/**
+ * Checks if a sliding move is valid for a given piece.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @param direction An array of directions the piece can move in.
+ * @returns True if the sliding move is valid, false otherwise.
+ */
 export function isValidSlidingMove(move: Move, board: Board, direction: { row: number, col: number }[]): boolean {
     const { from, to } = move;
 
@@ -86,6 +94,12 @@ export function isValidSlidingMove(move: Move, board: Board, direction: { row: n
     return false;
 }
 
+/**
+ * Checks if a rook move is valid.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @returns True if the rook move is valid, false otherwise.
+ */
 export function isValidRookMove(move: Move, board: Board): boolean {
     const direction = [
         { row: 1, col: 0 }, { row: -1, col: 0 }, { row: 0, col: 1 }, { row: 0, col: -1 }
@@ -94,6 +108,12 @@ export function isValidRookMove(move: Move, board: Board): boolean {
     return isValidSlidingMove(move, board, direction);
 }
 
+/**
+ * Checks if a bishop move is valid.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @returns True if the bishop move is valid, false otherwise.
+ */
 export function isValidBishopMove(move: Move, board: Board): boolean {
     const direction = [
         { row: 1, col: 1 }, { row: 1, col: -1 },
@@ -103,6 +123,12 @@ export function isValidBishopMove(move: Move, board: Board): boolean {
     return isValidSlidingMove(move, board, direction);
 }
 
+/**
+ * Checks if a knight move is valid.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @returns True if the knight move is valid, false otherwise.
+ */
 export function isValidKnightMove(move: Move, board: Board): boolean {
     const { from, to } = move;
     const piece = board.getPiece(from);
@@ -120,6 +146,12 @@ export function isValidKnightMove(move: Move, board: Board): boolean {
     return false;
 }
 
+/**
+ * Checks if a queen move is valid.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @returns True if the queen move is valid, false otherwise.
+ */
 export function isValidQueenMove(move: Move, board: Board): boolean {
     const { from, to } = move;
     const piece = board.getPiece(from);
@@ -133,6 +165,12 @@ export function isValidQueenMove(move: Move, board: Board): boolean {
     return false;
 }
 
+/**
+ * Checks if a king move is valid.
+ * @param move The move to check.
+ * @param board The current board state.
+ * @returns True if the king move is valid, false otherwise.
+ */
 export function isValidKingMove(move: Move, board: Board): boolean {
     const { from, to } = move;
     const piece = board.getPiece(from);
@@ -158,6 +196,10 @@ export function isValidKingMove(move: Move, board: Board): boolean {
     return false;
 }
 
+/**
+ * Initializes the board with the starting position of the pieces.
+ * @param game The game instance.
+ */
 export function intializeBoard(game: Game) {
     const whitePawn = new Piece("white", 'pawn', { row: 6, col: 0 }, { row: 6, col: 0 }, false);
     game.gameState.board.setPiece({ row: 6, col: 0 }, whitePawn);
@@ -233,6 +275,11 @@ export function intializeBoard(game: Game) {
     game.gameState.currentPlayer = "white";
 }
 
+/**
+ * Initializes the board for testing the en passant rule.
+ * @param game The game instance.
+ * @hidden
+ */
 export function enPassantTest(game: Game) {
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let j = 0; j < BOARD_SIZE; j++) {
@@ -252,6 +299,11 @@ export function enPassantTest(game: Game) {
     game.gameState.currentPlayer = "white";
 }
 
+/**
+ * Initializes the board for testing if a square is being attacked.
+ * @param game The game instance.
+ * @hidden
+ */
 export function checkingIsSquareBeingAttacked(game: Game) {
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let j = 0; j < BOARD_SIZE; j++) {
@@ -265,6 +317,11 @@ export function checkingIsSquareBeingAttacked(game: Game) {
     game.gameState.board.setPiece({ row: 7, col: 6 }, blackKing);
 }
 
+/**
+ * Initializes the board for testing castling.
+ * @param game The game instance.
+ * @hidden
+ */
 export function intializeCastlingBoard(game: Game) {
     for (let i = 0; i < BOARD_SIZE; i++) {
         for (let j = 0; j < BOARD_SIZE; j++) {

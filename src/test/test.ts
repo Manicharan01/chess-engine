@@ -1,3 +1,8 @@
+/**
+ * This file contains test code for the chess engine.
+ * @hidden
+ */
+
 import { Game } from "../index";
 import { checkingIsSquareBeingAttacked, intializeBoard } from "../helper";
 import { isTheSquareBeingAttacked } from "../utils";
