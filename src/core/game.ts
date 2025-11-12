@@ -2,6 +2,7 @@ import { isKingInCheck, isValidBishopMove, isValidKingMove, isValidKnightMove, i
 import { Board } from "./board";
 import { Piece } from "./piece";
 import { Move, Position } from "./types/types";
+import { isPathClear, isPathAttacked } from "../game-logic/utils";
 
 /**
  * Represents the state of the game.
@@ -42,6 +43,10 @@ export class Game {
         if (!piece || piece.color !== this.currentPlayer || piece.isCaptured) {
             console.error("Invalid player or piece");
             return false;
+        }
+
+        if (this.isCastlingMove(move)) {
+            return this.validateCastlingMove(move);
         }
 
         const validateMove = this.validateMoveByPieceType(move, piece);
@@ -90,35 +95,10 @@ export class Game {
     makeMove(move: Move) {
         if (!this.isValidMove(move)) throw new Error("Not a valid move");
 
-        this.executeMove(move);
-    }
-
-    /**
-     * Executes a move on the board.
-     * @param move The move to execute.
-     * @throws An error if the move is invalid.
-     * @private
-     */
-    executeMove(move: Move) {
         const { from, to } = move;
-        const piece = this.board.getPiece(from)
+        const piece = this.board.getPiece(from);
 
-        let opponentPiece = this.board.getPiece(to);
-        if (opponentPiece && opponentPiece.color === this.currentPlayer) {
-            console.error("Moving to an occupied position which is occupied by same player");
-            throw new Error("Moving to an occupied position which is occupied by same player")
-        };
-        if (opponentPiece && opponentPiece.isCaptured) {
-            console.error("Moving to an occupied position which is captured");
-            throw new Error("Moving to an occupied position which is captured")
-        };
-        if (opponentPiece) opponentPiece.isCaptured = true;
-
-        if (piece?.type === "king" || piece?.type === "rook") {
-            this.updateCastlingRights(move);
-        }
-
-        if (piece?.type === "king" && Math.abs(to.col - from.col) === 2) {
+        if (this.isCastlingMove(move)) {
             const rookSide = to.col === 6 ? 7 : 0;
             const rookEndCol = to.col === 6 ? 5 : 3;
             const rook = this.board.getPiece({ row: from.row, col: rookSide });
@@ -129,14 +109,18 @@ export class Game {
             }
         }
 
-        if (this.enPassantSquare && this.enPassantSquare.row === to.row && this.enPassantSquare.col === to.col) {
-            let enPassantedPiecePos = this.moveHistory[this.moveHistory.length - 1].to
-            this.board.setPiece(enPassantedPiecePos, null);
+        if (piece?.type === "pawn" && this.enPassantSquare && to.row === this.enPassantSquare.row && to.col === this.enPassantSquare.col) {
+            const capturedPawnPosition: Position = { row: from.row, col: to.col };
+            this.board.setPiece(capturedPawnPosition, null);
         }
 
         this.board.setPiece(to, piece);
         this.board.setPiece(from, null);
         this.moveHistory.push(move);
+
+        if (piece?.type === "pawn" && (to.row === 0 || to.row === 7)) {
+            this.promotePawn(to);
+        }
 
         if (piece?.type === "pawn" && Math.abs(from.row - to.row) === 2) {
             this.enPassantSquare = { row: (to.row + from.row) / 2, col: from.col };
@@ -144,7 +128,70 @@ export class Game {
             this.enPassantSquare = null;
         }
 
+        if (piece?.type === "king" || piece?.type === "rook") {
+            this.updateCastlingRights(move);
+        }
+
         this.currentPlayer = this.currentPlayer === "white" ? "black" : "white";
+    }
+
+    /**
+     * Checks if a move is a castling move.
+     * @param move The move to check.
+     * @returns True if the move is a castling move, false otherwise.
+     * @private
+     */
+    private isCastlingMove(move: Move): boolean {
+        const { from, to } = move;
+        const piece = this.board.getPiece(from);
+        return piece?.type === "king" && Math.abs(to.col - from.col) === 2;
+    }
+
+    /**
+     * Validates a castling move.
+     * @param move The move to validate.
+     * @returns True if the castling move is valid, false otherwise.
+     * @private
+     */
+    private validateCastlingMove(move: Move): boolean {
+        const { from, to } = move;
+        const piece = this.board.getPiece(from);
+        const isWhite = piece?.color === "white";
+
+        if (isKingInCheck(this.board, isWhite)) {
+            return false;
+        }
+
+        const rookCol = to.col === 6 ? 7 : 0;
+        const rook = this.board.getPiece({ row: from.row, col: rookCol });
+
+        if (!rook || rook.type !== "rook") {
+            return false;
+        }
+
+        const path = [];
+        const direction = to.col > from.col ? 1 : -1;
+        for (let i = 1; i < Math.abs(to.col - from.col); i++) {
+            path.push({ row: from.row, col: from.col + i * direction });
+        }
+
+        if (!isPathClear(this, path) || isPathAttacked(this, path)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Promotes a pawn to a queen.
+     * @param position The position of the pawn to promote.
+     * @private
+     */
+    private promotePawn(position: Position) {
+        const piece = this.board.getPiece(position);
+        if (piece && piece.type === "pawn") {
+            piece.type = "queen";
+        }
     }
 
     /**
