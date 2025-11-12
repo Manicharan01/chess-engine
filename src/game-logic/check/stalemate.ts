@@ -1,5 +1,5 @@
-import { getAllMoves } from "../possibleMoves/moveGenerator";
-import { Game } from "../index";
+import { getAllMoves } from "../possible-moves/move-generator";
+import { Game } from "../../core";
 import { isKingInCheck } from "./check";
 
 /**
@@ -9,7 +9,7 @@ import { isKingInCheck } from "./check";
  * @returns True if the game is in a stalemate, false otherwise.
  */
 export function isStalemate(game: Game, isWhite: boolean): boolean {
-    const board = game.gameState.board;
+    const board = game.board;
     if (isKingInCheck(board, isWhite)) return false;
 
     const allMoves = getAllMoves(game, isWhite);

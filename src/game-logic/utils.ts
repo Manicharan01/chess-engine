@@ -1,5 +1,6 @@
-import { Move, Position } from "./types/types";
-import { Board, BOARD_SIZE, Game } from "./index";
+import { Move, Position } from "../core/types/types";
+import { Board, Game } from "../core";
+import { BOARD_SIZE } from "../constants";
 
 /**
  * Creates a deep copy of the board.
@@ -44,10 +45,10 @@ export function isWithinBounds(row: number, col: number): boolean {
  * @returns True if the square is being attacked, false otherwise.
  */
 export function isTheSquareBeingAttacked(game: Game, position: Position): boolean {
-    const board = game.gameState.board;
-    const opponent = game.gameState.currentPlayer === "white" ? "black" : "white";
+    const board = game.board;
+    const opponent = game.currentPlayer === "white" ? "black" : "white";
 
-    const pawnDirection = game.gameState.currentPlayer === "white" ? -1 : 1;
+    const pawnDirection = game.currentPlayer === "white" ? -1 : 1;
     const pawnAttackCols = [position.col - 1, position.col + 1];
     const pawnRow = position.row + pawnDirection;
 
@@ -125,7 +126,7 @@ export function isTheSquareBeingAttacked(game: Game, position: Position): boolea
  */
 export function isPathClear(game: Game, path: Position[]): boolean {
     for (const position of path) {
-        const piece = game.gameState.board.getPiece(position);
+        const piece = game.board.getPiece(position);
         if (piece) {
             return false;
         }

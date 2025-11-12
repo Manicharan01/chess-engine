@@ -1,5 +1,5 @@
-import { Position } from "../types/types";
-import { Board } from "../index";
+import { Position } from "../../core/types/types";
+import { Board } from "../../core";
 
 /**
 * Gets the king's position on the board based on its color.

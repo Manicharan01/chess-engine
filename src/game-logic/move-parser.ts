@@ -1,14 +1,4 @@
-/**
- * A map of file characters to their corresponding column index.
- * @hidden
- */
-const FILES: { [key: string]: number } = { 'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7 };
-
-/**
- * A map of piece characters to their corresponding piece type.
- * @hidden
- */
-const PIECES: { [key: string]: string } = { 'p': 'pawn', 'r': 'rook', 'n': 'knight', 'b': 'bishop', 'q': 'queen', 'k': 'king' };
+import { FILES, PIECES } from "../constants";
 
 /**
  * Parses a move in algebraic notation and returns the board coordinates.

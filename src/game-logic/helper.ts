@@ -1,6 +1,7 @@
-import { Game, Board, Piece, BOARD_SIZE } from "./index";
-import { Move, Position } from "./types/types";
+import { Game, Board, Piece } from "../core";
+import { Move } from "../core/types/types";
 import { isWithinBounds } from "./utils";
+import { BOARD_SIZE } from "../constants";
 
 /**
  * Checks if a pawn move is valid.
@@ -202,137 +203,75 @@ export function isValidKingMove(move: Move, board: Board): boolean {
  */
 export function intializeBoard(game: Game) {
     const whitePawn = new Piece("white", 'pawn', { row: 6, col: 0 }, { row: 6, col: 0 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 0 }, whitePawn);
+    game.board.setPiece({ row: 6, col: 0 }, whitePawn);
     const whitePawn1 = new Piece("white", 'pawn', { row: 6, col: 1 }, { row: 6, col: 1 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 1 }, whitePawn1);
+    game.board.setPiece({ row: 6, col: 1 }, whitePawn1);
     const whitePawn2 = new Piece("white", 'pawn', { row: 6, col: 2 }, { row: 6, col: 2 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 2 }, whitePawn2);
+    game.board.setPiece({ row: 6, col: 2 }, whitePawn2);
     const whitePawn3 = new Piece("white", 'pawn', { row: 6, col: 3 }, { row: 6, col: 3 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 3 }, whitePawn3);
+    game.board.setPiece({ row: 6, col: 3 }, whitePawn3);
     const whitePawn4 = new Piece("white", 'pawn', { row: 6, col: 4 }, { row: 6, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 4 }, whitePawn4);
+    game.board.setPiece({ row: 6, col: 4 }, whitePawn4);
     const whitePawn5 = new Piece("white", 'pawn', { row: 6, col: 5 }, { row: 6, col: 5 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 5 }, whitePawn5);
+    game.board.setPiece({ row: 6, col: 5 }, whitePawn5);
     const whitePawn6 = new Piece("white", 'pawn', { row: 6, col: 6 }, { row: 6, col: 6 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 6 }, whitePawn6);
+    game.board.setPiece({ row: 6, col: 6 }, whitePawn6);
     const whitePawn7 = new Piece("white", 'pawn', { row: 6, col: 7 }, { row: 6, col: 7 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 7 }, whitePawn7);
+    game.board.setPiece({ row: 6, col: 7 }, whitePawn7);
     const blackPawn = new Piece("black", 'pawn', { row: 1, col: 0 }, { row: 1, col: 0 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 0 }, blackPawn);
+    game.board.setPiece({ row: 1, col: 0 }, blackPawn);
     const blackPawn1 = new Piece("black", 'pawn', { row: 1, col: 1 }, { row: 1, col: 1 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 1 }, blackPawn1);
+    game.board.setPiece({ row: 1, col: 1 }, blackPawn1);
     const blackPawn2 = new Piece("black", 'pawn', { row: 1, col: 2 }, { row: 1, col: 2 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 2 }, blackPawn2);
+    game.board.setPiece({ row: 1, col: 2 }, blackPawn2);
     const blackPawn3 = new Piece("black", 'pawn', { row: 1, col: 3 }, { row: 1, col: 3 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 3 }, blackPawn3);
+    game.board.setPiece({ row: 1, col: 3 }, blackPawn3);
     const blackPawn4 = new Piece("black", 'pawn', { row: 1, col: 4 }, { row: 1, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 4 }, blackPawn4);
+    game.board.setPiece({ row: 1, col: 4 }, blackPawn4);
     const blackPawn5 = new Piece("black", 'pawn', { row: 1, col: 5 }, { row: 1, col: 5 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 5 }, blackPawn5);
+    game.board.setPiece({ row: 1, col: 5 }, blackPawn5);
     const blackPawn6 = new Piece("black", 'pawn', { row: 1, col: 6 }, { row: 1, col: 6 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 6 }, blackPawn6);
+    game.board.setPiece({ row: 1, col: 6 }, blackPawn6);
     const blackPawn7 = new Piece("black", 'pawn', { row: 1, col: 7 }, { row: 1, col: 7 }, false);
-    game.gameState.board.setPiece({ row: 1, col: 7 }, blackPawn7);
+    game.board.setPiece({ row: 1, col: 7 }, blackPawn7);
     const whiteRook = new Piece("white", 'rook', { row: 7, col: 0 }, { row: 7, col: 0 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 0 }, whiteRook);
+    game.board.setPiece({ row: 7, col: 0 }, whiteRook);
     const whiteRook1 = new Piece("white", 'rook', { row: 7, col: 7 }, { row: 7, col: 7 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 7 }, whiteRook1);
+    game.board.setPiece({ row: 7, col: 7 }, whiteRook1);
     const whiteKnight = new Piece("white", 'knight', { row: 7, col: 1 }, { row: 7, col: 1 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 1 }, whiteKnight);
+    game.board.setPiece({ row: 7, col: 1 }, whiteKnight);
     const whiteKnight1 = new Piece("white", 'knight', { row: 7, col: 6 }, { row: 7, col: 6 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 6 }, whiteKnight1);
+    game.board.setPiece({ row: 7, col: 6 }, whiteKnight1);
     const whiteBishop = new Piece("white", 'bishop', { row: 7, col: 2 }, { row: 7, col: 2 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 2 }, whiteBishop);
+    game.board.setPiece({ row: 7, col: 2 }, whiteBishop);
     const whiteBishop1 = new Piece("white", 'bishop', { row: 7, col: 5 }, { row: 7, col: 5 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 5 }, whiteBishop1);
+    game.board.setPiece({ row: 7, col: 5 }, whiteBishop1);
     const whiteQueen = new Piece("white", 'queen', { row: 7, col: 3 }, { row: 7, col: 3 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 3 }, whiteQueen);
+    game.board.setPiece({ row: 7, col: 3 }, whiteQueen);
     const whiteKing = new Piece("white", 'king', { row: 7, col: 4 }, { row: 7, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 4 }, whiteKing);
+    game.board.setPiece({ row: 7, col: 4 }, whiteKing);
     const blackKing = new Piece("black", 'king', { row: 0, col: 4 }, { row: 0, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 4 }, blackKing);
+    game.board.setPiece({ row: 0, col: 4 }, blackKing);
     const blackQueen = new Piece("black", 'queen', { row: 0, col: 3 }, { row: 0, col: 3 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 3 }, blackQueen);
+    game.board.setPiece({ row: 0, col: 3 }, blackQueen);
     const blackBishop = new Piece("black", 'bishop', { row: 0, col: 2 }, { row: 0, col: 2 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 2 }, blackBishop);
+    game.board.setPiece({ row: 0, col: 2 }, blackBishop);
     const blackBishop1 = new Piece("black", 'bishop', { row: 0, col: 5 }, { row: 0, col: 5 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 5 }, blackBishop1);
+    game.board.setPiece({ row: 0, col: 5 }, blackBishop1);
     const blackRook = new Piece("black", 'rook', { row: 0, col: 0 }, { row: 0, col: 0 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 0 }, blackRook);
+    game.board.setPiece({ row: 0, col: 0 }, blackRook);
     const blackRook1 = new Piece("black", 'rook', { row: 0, col: 7 }, { row: 0, col: 7 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 7 }, blackRook1);
+    game.board.setPiece({ row: 0, col: 7 }, blackRook1);
     const blackKnight = new Piece("black", 'knight', { row: 0, col: 1 }, { row: 0, col: 1 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 1 }, blackKnight);
+    game.board.setPiece({ row: 0, col: 1 }, blackKnight);
     const blackKnight1 = new Piece("black", 'knight', { row: 0, col: 6 }, { row: 0, col: 6 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 6 }, blackKnight1);
+    game.board.setPiece({ row: 0, col: 6 }, blackKnight1);
 
     for (let i = 2; i < 6; i++) {
         for (let j = 0; j < BOARD_SIZE; j++) {
-            game.gameState.board.setPiece({ row: i, col: j }, null);
+            game.board.setPiece({ row: i, col: j }, null);
         }
     }
 
-    game.gameState.currentPlayer = "white";
-}
-
-/**
- * Initializes the board for testing the en passant rule.
- * @param game The game instance.
- * @hidden
- */
-export function enPassantTest(game: Game) {
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-            game.gameState.board.setPiece({ row: i, col: j }, null);
-        }
-    }
-
-    const whitePawn = new Piece("white", 'pawn', { row: 6, col: 0 }, { row: 6, col: 0 }, false);
-    game.gameState.board.setPiece({ row: 6, col: 0 }, whitePawn);
-    const blackPawn = new Piece("black", 'pawn', { row: 4, col: 1 }, { row: 4, col: 1 }, false);
-    game.gameState.board.setPiece({ row: 4, col: 1 }, blackPawn);
-    const whiteKing = new Piece("white", 'king', { row: 7, col: 4 }, { row: 7, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 4 }, whiteKing);
-    const blackKing = new Piece("black", 'king', { row: 0, col: 4 }, { row: 0, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 4 }, blackKing);
-
-    game.gameState.currentPlayer = "white";
-}
-
-/**
- * Initializes the board for testing if a square is being attacked.
- * @param game The game instance.
- * @hidden
- */
-export function checkingIsSquareBeingAttacked(game: Game) {
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-            game.gameState.board.setPiece({ row: i, col: j }, null);
-        }
-    }
-
-    const whiteKing = new Piece("white", 'king', { row: 7, col: 0 }, { row: 7, col: 0 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 0 }, whiteKing);
-    const blackKing = new Piece("black", 'king', { row: 7, col: 6 }, { row: 7, col: 6 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 6 }, blackKing);
-}
-
-/**
- * Initializes the board for testing castling.
- * @param game The game instance.
- * @hidden
- */
-export function intializeCastlingBoard(game: Game) {
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        for (let j = 0; j < BOARD_SIZE; j++) {
-            game.gameState.board.setPiece({ row: i, col: j }, null);
-        }
-    }
-
-    const whiteKing = new Piece("white", 'king', { row: 7, col: 4 }, { row: 7, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 4 }, whiteKing);
-    const blackKing = new Piece("black", 'king', { row: 0, col: 4 }, { row: 0, col: 4 }, false);
-    game.gameState.board.setPiece({ row: 0, col: 4 }, blackKing);
-    const whiteRook = new Piece("white", 'rook', { row: 7, col: 7 }, { row: 7, col: 7 }, false);
-    game.gameState.board.setPiece({ row: 7, col: 7 }, whiteRook);
+    game.currentPlayer = "white";
 }

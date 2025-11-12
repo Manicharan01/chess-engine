@@ -3,9 +3,8 @@
  * @hidden
  */
 
-import { Game } from "../index";
-import { checkingIsSquareBeingAttacked, intializeBoard } from "../helper";
-import { isTheSquareBeingAttacked } from "../utils";
+import { Game, isTheSquareBeingAttacked } from "../index";
+import { checkingIsSquareBeingAttacked } from "../test-utils/board-setups";
 
 const game = new Game();
 checkingIsSquareBeingAttacked(game);

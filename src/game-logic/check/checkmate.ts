@@ -1,6 +1,6 @@
-import { getAllMoves, getKingMoves } from "../possibleMoves/moveGenerator";
+import { getAllMoves, getKingMoves } from "../possible-moves/move-generator";
 import { getKingPosition, isKingInCheck } from "./check";
-import { Game } from "../index";
+import { Game } from "../../core";
 
 /**
  * Checks if the king is in checkmate.
@@ -9,7 +9,7 @@ import { Game } from "../index";
  * @returns True if the king is in checkmate, false otherwise.
  */
 export function checkmate(game: Game, isWhite: boolean): boolean {
-    const board = game.gameState.board;
+    const board = game.board;
     if (!isKingInCheck(board, isWhite)) return false;
 
     const kingPosition = getKingPosition(board, isWhite);
